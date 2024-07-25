@@ -1,6 +1,7 @@
 ﻿using BepInEx;
 using GorillaNetworking;
 using Jerald;
+using Photon.Pun;
 using System.Text;
 using UnityEngine;
 [assembly: AutoRegister]
@@ -45,6 +46,10 @@ namespace ColorsExpanded
                         Debug.Log($"R:{float.Parse(redTyped)} G:{float.Parse(greenTyped)}, B:{float.Parse(blueTyped)}");
                         GorillaTagger.Instance.UpdateColor(float.Parse(redTyped), float.Parse(greenTyped), float.Parse(blueTyped));
                         PlayerPrefs.Save();
+                        if (NetworkSystem.Instance.InRoom)
+                        {
+                            GorillaTagger.Instance.myVRRig.RPC("InitializeNoobMaterial", RpcTarget.All, float.Parse(redTyped), float.Parse(greenTyped), float.Parse(blueTyped));
+                        }
                         break;
 
                     case GorillaKeyboardBindings.delete:
